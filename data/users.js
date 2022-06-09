@@ -6,14 +6,15 @@ export const USERS =[
     },
     {
         id: 2,
-        user: 'Andri',
-        image:  'https://shazler.com/wp-content/uploads/2021/08/avatarfemme.png'
+        user: 'Antoine',
+        image:  'https://cdn.discordapp.com/attachments/805783824277569569/983394223409741924/20220606_173658.jpg'
     },
     {
         id: 3,
-        user: 'Antoine',
-        image:  'http://editions-agapante.com/wa_images/avatar-user-business-man-399587fe24739d5a-512x512.png'
+        user: 'Andri',
+        image:  'https://cdn.discordapp.com/attachments/690510525989388360/983396719712665700/IMG20220606174701.jpg'
     },
+    
     {
         id: 4,
         user: 'Tsoutsou',
