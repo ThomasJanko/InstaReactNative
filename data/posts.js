@@ -42,7 +42,7 @@ export const POSTS = [
     {
         imageUrl: 'https://img.freepik.com/photos-gratuite/paysage-paisible-paisible-campagne-propre-flux_1417-1106.jpg?w=2000',
         user: USERS[2].user,
-        likes: 42,
+        likes: 42015,
         caption: 'Test caption 3',
         profile_picture: USERS[2].image,
         comments: [
