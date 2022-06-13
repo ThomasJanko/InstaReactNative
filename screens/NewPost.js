@@ -3,10 +3,10 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 import AddPost from '../components/newPost/AddPost'
 
-const NewPost = () => {
+const NewPost = ({navigation}) => {
   return (
    <View style={styles.container}>
-    <AddPost/>
+    <AddPost navigation={navigation} />
    </View>
   )
 }

@@ -5,17 +5,17 @@ import FormikPostUploader from './FormikPostUploader'
 
 
 
-const AddPost = () => (
+const AddPost = ({navigation}) => (
     <View style={styles.container} >
-        <Header/>
+        <Header navigation={navigation}/>
         <FormikPostUploader/>
     </View>
 )
 
-const Header = () => (
+const Header = ({navigation}) => (
 
     <View style={styles.headerContainer}>
-        <TouchableOpacity>
+        <TouchableOpacity  onPress={()=>navigation.goBack()}>
              <Image source={require('../../assets/back.png')} style={{width: 30, height: 30}} />
         </TouchableOpacity>
        

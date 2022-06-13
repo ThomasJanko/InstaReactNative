@@ -1,7 +1,7 @@
 import { View, Text, SafeAreaView, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 
-const Header = () => {
+const Header = ({navigation}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity>
@@ -13,7 +13,7 @@ const Header = () => {
 
       <View style={styles.iconContainer}>
 
-        <TouchableOpacity >
+        <TouchableOpacity onPress={()=>navigation.push('NewPost') }>
 
           <Image source={require('../../assets/instaAdd.png')}  style={{width: 50, height: 30}}/>
               
