@@ -9,8 +9,8 @@ export default function App() {
 
   
   return (
-    // <SignedInStack/>
-    <LoginScreen/>
+    <SignedInStack/>
+    // <LoginScreen/>
     // <NewPost/>
     // <HomeScreen/>
   );
