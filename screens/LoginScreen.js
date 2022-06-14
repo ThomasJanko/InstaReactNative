@@ -6,13 +6,13 @@ import LoginForm from '../components/loginScreen/LoginForm'
 
 const INSTA_LOGO = require('../assets/instagram.png')
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
         <Image source={INSTA_LOGO} style={{height: 100, width: 100}} />
       </View>
-      <LoginForm/>
+      <LoginForm navigation={navigation}/>
     </View>
   )
 }

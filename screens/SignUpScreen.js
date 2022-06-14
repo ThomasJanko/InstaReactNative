@@ -6,13 +6,13 @@ import SignUpForm from '../components/signUpScreen/SignUpForm'
 
 const INSTA_LOGO = require('../assets/instagram.png')
 
-const SignUpScreen = () => {
+const SignUpScreen = ({navigation}) => {
     return (
         <View style={styles.container}>
           <View style={styles.logoContainer}>
             <Image source={INSTA_LOGO} style={{height: 100, width: 100}} />
           </View>
-          <SignUpForm/>
+          <SignUpForm navigation={navigation}/>
         </View>
       )
 }
