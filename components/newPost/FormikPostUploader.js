@@ -1,9 +1,10 @@
 import { View, Text, Image, TextInput } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { Button } from 'react-native';
 import validUrl from 'valid-url'
+import {db, firebase} from '../../firebase'
 
 
 const PLACEHOLDER_IMG = 'https://image.shutterstock.com/image-vector/no-image-vector-symbol-missing-260nw-1310632172.jpg'
@@ -15,14 +16,49 @@ const uploadPostSchema = Yup.object().shape( {
 const FormikPostUploader = ({navigation}) => {
 
     const [thumbnailUrl, setThumbnailUrl]= useState(PLACEHOLDER_IMG)
+    const [currentLoggedInUser, setCurrentLoggedinUser] = useState(null)
+
+    const getUsername = () => {
+        const user = firebase.auth().currentUser
+        const unsubscribe = db.collection('users').where('owner_uid', '==', user.uid).limit(1).onSnapshot(
+            snapshot => snapshot.docs.map(doc => {
+                setCurrentLoggedinUser({
+                    username: doc.data().username,
+                    profilePicture: doc.data().profile_picture,
+                })
+            })
+        )
+        return unsubscribe
+    }
+
+    useEffect(() => {
+      getUsername() 
+    }, [])
+
+    const uploadPostToFirebase = (imageUrl, caption) => {
+        const unsubscribe = db.collection('users').doc(firebase.auth().currentUser.email).collection('posts')
+        .add({
+            imageUrl: imageUrl,
+            user: currentLoggedInUser.username,
+            profile_picture: currentLoggedInUser.profilePicture,
+            owner_uid: firebase.auth().currentUser.uid,
+            caption: caption,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            likes: 0,
+            likes_by_users: [],
+            comments: [],
+        })
+        .then(()=> navigation.goBack())
+
+        return unsubscribe
+    }
+    
 
   return (
     <Formik
     initialValues={{caption: '', imageUrl: ''}}
     onSubmit={(values) => {
-        console.log(values)
-        console.log('Post Submit Successfully')
-        navigation.goBack()
+       uploadPostToFirebase(values.imageUrl, values.caption)
     }}
     validationSchema={uploadPostSchema}
     validateOnMount={true}
