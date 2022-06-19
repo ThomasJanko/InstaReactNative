@@ -1,6 +1,6 @@
 import { View, Text, TextInput, Button, StyleSheet, Pressable, TouchableOpacity, Alert } from 'react-native'
 import React from 'react'
-import firebase from '../../firebase'
+import {firebase, db} from '../../firebase'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import validator from 'email-validator'
@@ -13,10 +13,22 @@ const SignUpForm = ({navigation}) => {
         password: Yup.string().required().min(6, 'Your password has to have at least 6 characters')
     })
 
+    const getRandomProfilePicture = async () => {
+        const response = await fetch('https://randomuser.me/api')
+        const data = await response.json()
+        return data.results[0].picture.large
+    }
+
     const onSignUp = async (email, password, username)=> {
         try{
-            await firebase.auth().createUserWithEmailAndPassword(email, password)
+            const authUser = await firebase.auth().createUserWithEmailAndPassword(email, password)
             console.log('New User created: ', email, password, username)
+            db.collection('users').add({
+                owner_uid: authUser.user.uid,
+                username: username,
+                email: authUser.user.email,
+                profile_picture: await getRandomProfilePicture()
+            })
         }
         catch(error){
             Alert.alert('My Lord ...', error.message)
