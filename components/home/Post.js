@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <View style={styles.leftFooterIconsContainer}>
             <TouchableOpacity onPress={()=> handleLike(post)}>
-                <Image  style={styles.footericon} source={require('../../assets/instaheart.png')} />
+                <Image  style={styles.footericon} source={post.likes_by_users.includes(firebase.auth().currentUser.email)? require('../../assets/instaheartRed.png') : require('../../assets/instaheart.png')} />
             </TouchableOpacity> 
             {/* <Image  style={styles.footericon} source={require('../../assets/instaheart.png')} /> */}
             <Image style={{width: 22, height: 22 }} source={require('../../assets/instacomment.jpg')} />

@@ -76,7 +76,7 @@ const BottomTab = ({icons}) => {
       ))}
         <TouchableOpacity onPress={() => setActiveTab('Profil')}>
            
-       <Image style={activeTab=='Profil'? styles.profilPicActive : styles.profilPic} source={{ uri:currentLoggedInUser.profilePicture }}/>
+       <Image style={activeTab=='Profil'? styles.profilPicActive : styles.profilPic} source={{uri: currentLoggedInUser? currentLoggedInUser.profilePicture: "https://i.ibb.co/mX871MY/cat.jpg" }}/>
        </TouchableOpacity>
        </View>
    
