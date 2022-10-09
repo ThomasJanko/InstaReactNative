@@ -1,15 +1,34 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import {firebase, db } from '../../firebase'
+import { BackgroundImage } from 'react-native-elements/dist/config'
 // import { Divider } from 'react-native-elements'
 
 const Post = ({post}) => {
+    const handleLike = post =>{
+        const currentLikeStatus = !post.likes_by_users.includes(
+            firebase.auth().currentUser.email
+        )
+        db.collection('users').doc(post.owner_email).collection('posts').doc(post.id)
+        .update({
+            likes_by_users: currentLikeStatus? 
+            firebase.firestore.FieldValue.arrayUnion(firebase.auth().currentUser.email) 
+            :
+            firebase.firestore.FieldValue.arrayRemove(firebase.auth().currentUser.email)
+        })
+        .then(()=>{
+            console.log('Document Updated! ')
+        })
+        .catch((error) => console.error(error))
+    }
+    
   return (
     <View style={{marginBottom: 30}}>
         {/* <Divider width={1} orientation='vertical'/> */}
      <PostHeader post={post}/>
      <PostImage post={post} />
      <View style={{marginHorizontal: 15, marginTop: 10}}>
-            <PostFooter />
+            <PostFooter post={post} handleLike={handleLike}/>
             <Likes post={post} /> 
             <Caption post={post}/> 
             <CommentsSection post={post}/> 
@@ -74,16 +93,19 @@ const styles = StyleSheet.create({
   )
 
 
-  const PostFooter = () => (
+  const PostFooter = ({handleLike, post}) => (
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <View style={styles.leftFooterIconsContainer}>
-              
-            <Image  style={styles.footericon} source={require('../../assets/instaheart.png')} />
+            <TouchableOpacity onPress={()=> handleLike(post)}>
+                <Image  style={styles.footericon} source={require('../../assets/instaheart.png')} />
+            </TouchableOpacity> 
+            {/* <Image  style={styles.footericon} source={require('../../assets/instaheart.png')} /> */}
             <Image style={{width: 22, height: 22 }} source={require('../../assets/instacomment.jpg')} />
             <Image  style={styles.footericon} source={require('../../assets/instasendlogo.png')} />
           </View>
 
           <View>
+            
           <Image style={{width: 20, height: 20 }} source={require('../../assets/instaboomark.png')} />
 
           </View>
@@ -93,7 +115,7 @@ const styles = StyleSheet.create({
   const Likes = ({post}) => (
       <View style={{flexDirection: 'row', marginTop: 4}}>
           <Text style={{color: 'white', fontWeight: '600'}}>
-                {post.likes} likes
+                {post.likes_by_users.length } likes
           </Text>
       </View>
   )
