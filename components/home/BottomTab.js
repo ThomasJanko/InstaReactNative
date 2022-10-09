@@ -1,5 +1,7 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import React, { useState } from 'react'
+import {db, firebase} from '../../firebase';
+import { useEffect } from 'react';
 
 
 export const bottomIcons = [
@@ -30,7 +32,29 @@ export const bottomIcons = [
 
 ];
 
+
+
+
 const BottomTab = ({icons}) => {
+
+    const [currentLoggedInUser, setCurrentLoggedinUser] = useState(null)
+
+    const getUsername = () => {
+        const user = firebase.auth().currentUser
+        const unsubscribe = db.collection('users').where('owner_uid', '==', user.uid).limit(1).onSnapshot(
+            snapshot => snapshot.docs.map(doc => {
+                setCurrentLoggedinUser({
+                    username: doc.data().username,
+                    profilePicture: doc.data().profile_picture,
+                })
+            })
+        )
+        return unsubscribe
+    }
+
+    useEffect(() => {
+        getUsername() 
+      }, [])
 
     const [activeTab, setActiveTab] = useState('Home');
 
@@ -51,7 +75,8 @@ const BottomTab = ({icons}) => {
         <Icon key={index} icon={icon} />
       ))}
         <TouchableOpacity onPress={() => setActiveTab('Profil')}>
-       <Image style={activeTab=='Profil'? styles.profilPicActive : styles.profilPic} source={{ uri: 'https://cdn.discordapp.com/attachments/805783824277569569/983394223409741924/20220606_173658.jpg'}}/>
+           
+       <Image style={activeTab=='Profil'? styles.profilPicActive : styles.profilPic} source={{ uri:currentLoggedInUser.profilePicture }}/>
        </TouchableOpacity>
        </View>
    
@@ -96,5 +121,7 @@ const styles = StyleSheet.create({
         
     }
 })
+
+
 
 export default BottomTab
